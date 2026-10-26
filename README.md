@@ -18,7 +18,20 @@
 
 ---
 
-## 🌟 Nouvelle Interface Web !
+## 🎨 Version 2.0 - Claude-Style Modern Interface
+
+SuperNS features a **completely redesigned interface** inspired by Claude AI, offering a premium, clean, and professional user experience.
+
+### ✨ New Features
+
+- 🖼️ **Modern UI** - Clean sidebar, immersive welcome, elegant messages
+- 📎 **File Upload** - Drag & drop with image previews and document cards
+- 🤖 **Model Selector** - Choose between Opus, Sonnet, Haiku
+- 🧠 **Extended Thinking** - Toggle for deeper reasoning
+- 🎨 **Premium Design** - Light theme, red accents, smooth animations
+- 📱 **Responsive** - Works on desktop and mobile
+
+---## 🌟 Nouvelle Interface Web !
 
 SuperNS dispose maintenant d'une **interface web moderne** inspirée de ChatGPT et Claude !
 
