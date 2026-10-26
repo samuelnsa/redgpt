@@ -211,4 +211,6 @@ if __name__ == '__main__':
     print("🕷️ SuperNS Web Interface Starting...")
     print("🌐 Open your browser at: http://localhost:5000")
     print("⚡ Press Ctrl+C to stop")
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    print("")
+    # Disable auto-reload to avoid Python 3.13 compatibility issues
+    app.run(debug=False, host='0.0.0.0', port=5000, use_reloader=False)
