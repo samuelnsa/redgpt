@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  superns:
+    build: .
+    container_name: superns-web
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./.superns:/app/.superns
+    environment:
+      - FLASK_ENV=production
+    restart: unless-stopped
+    networks:
+      - superns-network
+
+networks:
+  superns-network:
+    driver: bridge
