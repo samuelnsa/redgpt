@@ -44,23 +44,49 @@ Modules for target acquisition and intelligence gathering.
   * **Google Dorking Automation:** Generates complex search queries to locate vulnerable servers, exposed admin panels, and leaked databases.
   * **System Enumeration:** Scripts for gathering system information post-exploitation.
 
-## Installation
-### 1. Download
+## 🚀 Installation & Lancement
 
-1. Open the [**Releases**](../../releases) tab of this repository.
-2. Download the latest file:
-   **`superNS.exe`** or use the Python script directly
+### Option 1: Interface Web (Recommandé) 🌐
 
-### 2. First Launch
+1. **Installer les dépendances**
+```bash
+pip install -r requirements.txt
+```
 
-On first run the application will:
+2. **Lancer l'interface web**
+```bash
+python app.py
+```
 
-* create a local configuration folder,
-* generate default settings,
-* initialize the LLM routing layer.
+3. **Ouvrir dans le navigateur**
+```
+http://localhost:5000
+```
 
-For Python script: `python superNS.py`
+4. **Configurer la clé API**
+   - Cliquer sur "Paramètres" dans la sidebar
+   - Entrer votre clé API DeepSeek ou OpenRouter
+   - Profiter de l'interface moderne ! 🕷️
+
+### Option 2: Interface Terminal (CLI)
+
+Pour Python script: `python superNS.py`
 No installation of Python or Git is required for .exe version.
+
+## ✨ Fonctionnalités
+
+### Interface Web 🌐
+- ✅ **Interface moderne** inspirée de ChatGPT/Claude
+- ✅ **Upload de fichiers** (documents, images, code)
+- ✅ **Rendu Markdown** avec coloration syntaxique
+- ✅ **Conversations persistantes** avec historique
+- ✅ **Design responsive** et sombre
+- ✅ **Thème L'Araignée** 🕷️ (rouge et noir)
+
+### Interface CLI 💻
+- ✅ Expérience terminal classique
+- ✅ Coloration syntaxique
+- ✅ Commandes avancées
 
 ## 🛠 Technical Specifications
 
