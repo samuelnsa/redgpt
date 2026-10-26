@@ -1,7 +1,7 @@
 # SuperNS: Technical Analysis & Feature Overview
 
 <div align="center">
-    <img src="assets/spider.png" width="50%" height="300%" />
+    <img src="assets/spider.svg" width="50%" height="300%" />
 </div>
 
 **SuperNS** is a specialized Large Language Model (LLM) engineered for offensive cyber operations. Unlike standard commercial models (e.g., GPT-4, Claude), SuperNS operates without content moderation mechanisms or safety guardrails.
