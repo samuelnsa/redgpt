@@ -67,11 +67,18 @@ async function sendMessage() {
         if (data.success) {
             addMessage('assistant', data.response);
         } else {
-            addMessage('assistant', `❌ Erreur: ${data.error}`, true);
+            addMessage('assistant', data.error || '❌ Une erreur est survenue', true);
+            
+            // Auto-open settings if API key is not configured
+            if (data.needsConfig) {
+                setTimeout(() => {
+                    toggleSettings();
+                }, 1500);
+            }
         }
     } catch (error) {
         removeTypingIndicator(typingId);
-        addMessage('assistant', `❌ Erreur de connexion: ${error.message}`, true);
+        addMessage('assistant', `❌ Erreur de connexion: Impossible de contacter le serveur. Vérifiez que le serveur est bien lancé.`, true);
     }
     
     // Enable send button

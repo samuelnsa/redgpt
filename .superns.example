@@ -1,0 +1,13 @@
+# SuperNS Configuration File
+# Rename this file to .superns and add your API key
+
+# For DeepSeek (recommended - free tier available)
+# Get your key at: https://platform.deepseek.com/
+SuperNS-API=sk-your-deepseek-key-here
+
+# OR for OpenRouter (alternative)
+# Get your key at: https://openrouter.ai/
+# SuperNS-API=sk-or-your-openrouter-key-here
+
+# Note: Only one API key is needed
+# Change API_PROVIDER in app.py (line 36) to switch providers

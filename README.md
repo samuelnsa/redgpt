@@ -2,11 +2,74 @@
 
 <div align="center">
     <img src="assets/spider.svg" width="50%" height="300%" />
+    
+<br>
+
+![Python](https://img.shields.io/badge/Python-3.7+-blue?logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-3.0-red?logo=flask&logoColor=white)
+![License](https://img.shields.io/badge/License-Educational-yellow)
+![Status](https://img.shields.io/badge/Status-Active-success)
+
 </div>
 
 **SuperNS** is a specialized Large Language Model (LLM) engineered for offensive cyber operations. Unlike standard commercial models (e.g., GPT-4, Claude), SuperNS operates without content moderation mechanisms or safety guardrails.
 
 **Developed by L'Araignée** 🕷️
+
+---
+
+## 🌟 Nouvelle Interface Web !
+
+SuperNS dispose maintenant d'une **interface web moderne** inspirée de ChatGPT et Claude !
+
+### ✨ Fonctionnalités principales :
+- 🎨 **Interface élégante** - Design moderne, sombre et épuré
+- 📎 **Upload de fichiers** - Documents, images, code (jusqu'à 16MB)
+- 💬 **Chat en temps réel** - Conversations fluides avec l'IA
+- 🎯 **Support Markdown** - Coloration syntaxique pour le code
+- 🕷️ **Thème personnalisé** - Rouge et noir, signature L'Araignée
+- 📱 **Responsive** - Fonctionne sur desktop et mobile
+
+### 🚀 Démarrage rapide :
+```bash
+# 1. Installer les dépendances
+pip install -r requirements.txt
+
+# 2. Lancer le serveur
+python app.py
+
+# 3. Ouvrir dans le navigateur
+http://localhost:5000
+```
+
+📖 **[Lire le guide complet](GUIDE.md)**
+
+---
+
+## 📸 Aperçu de l'interface
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  🕷️ SuperNS                                    [⚙️ Paramètres]  │
+│  by L'Araignée                                                  │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  👤 Vous                                                        │
+│  └─ Comment créer un script Python pour...                     │
+│                                                                 │
+│  🕷️ SuperNS                                                     │
+│  └─ [SuperNS] Voici un exemple de script Python :              │
+│     ```python                                                   │
+│     def hello_world():                                          │
+│         print("Hello from SuperNS!")                            │
+│     ```                                                         │
+│                                                                 │
+├─────────────────────────────────────────────────────────────────┤
+│  [📎] [Envoyez un message à SuperNS...]              [▶️]      │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
 
 ## ⚙️ Functional Modules
 

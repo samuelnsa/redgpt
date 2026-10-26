@@ -103,7 +103,10 @@ def chat():
         # Get API client
         result = get_api_client()
         if not result:
-            return jsonify({'error': 'API key not configured. Please add your API key to .superns file'}), 500
+            return jsonify({
+                'error': '⚠️ Clé API non configurée. Cliquez sur "Paramètres" pour ajouter votre clé API.',
+                'needsConfig': True
+            }), 500
         
         client, model = result
         
@@ -115,26 +118,40 @@ def chat():
         session['history'].append({"role": "user", "content": user_message})
         
         # Get AI response
-        response = client.chat.completions.create(
-            model=model,
-            messages=session['history'],
-            temperature=0.7,
-            stream=False
-        )
-        
-        assistant_message = response.choices[0].message.content
-        
-        # Add to history
-        session['history'].append({"role": "assistant", "content": assistant_message})
-        session.modified = True
-        
-        return jsonify({
-            'response': assistant_message,
-            'success': True
-        })
+        try:
+            response = client.chat.completions.create(
+                model=model,
+                messages=session['history'],
+                temperature=0.7,
+                stream=False
+            )
+            
+            assistant_message = response.choices[0].message.content
+            
+            # Add to history
+            session['history'].append({"role": "assistant", "content": assistant_message})
+            session.modified = True
+            
+            return jsonify({
+                'response': assistant_message,
+                'success': True
+            })
+        except openai.AuthenticationError:
+            return jsonify({
+                'error': '❌ Clé API invalide. Vérifiez votre clé dans les paramètres.',
+                'needsConfig': True
+            }), 401
+        except openai.RateLimitError:
+            return jsonify({
+                'error': '⏱️ Limite de requêtes atteinte. Attendez quelques instants avant de réessayer.'
+            }), 429
+        except Exception as e:
+            return jsonify({
+                'error': f'❌ Erreur API: {str(e)}'
+            }), 500
         
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': f'❌ Erreur serveur: {str(e)}'}), 500
 
 @app.route('/api/upload', methods=['POST'])
 def upload_file():
