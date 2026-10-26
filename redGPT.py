@@ -76,7 +76,7 @@ class Config:
     }
     
     # Change this if you want to use DeepSeek direct
-    API_PROVIDER = "openrouter" 
+    API_PROVIDER = "deepseek" 
     
     # System Paths
     ENV_FILE = ".red"
@@ -312,7 +312,7 @@ class App:
 
     def configure_key(self) -> bool:
         self.ui.banner()
-        self.ui.console.print("[bold yellow]Enter your API Key (starts with sk-or-...):[/]")
+        self.ui.console.print("[bold yellow]Enter your DeepSeek API Key:[/]")
         try:
             key = pwinput(prompt=f"{colorama.Fore.CYAN}Key > {colorama.Style.RESET_ALL}", mask="*")
         except:
