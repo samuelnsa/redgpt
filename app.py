@@ -61,14 +61,13 @@ def get_api_client():
         return None
     
     config = PROVIDERS[API_PROVIDER]
+    
+    # Create client without proxies parameter for compatibility
     client = openai.OpenAI(
         api_key=api_key,
-        base_url=config["BASE_URL"],
-        default_headers={
-            "HTTP-Referer": "https://github.com/LAraignee",
-            "X-Title": "SuperNS-Web"
-        }
+        base_url=config["BASE_URL"]
     )
+    
     return client, config["MODEL_NAME"]
 
 def read_file_content(filepath):

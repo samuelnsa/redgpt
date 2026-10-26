@@ -1,21 +1,95 @@
-// SuperNS - Claude-Style Interface JavaScript
+// SuperNS - Minimal Dark Futuristic Interface
 // Developed by L'Araignée 🕷️
 
 let attachedFiles = [];
 let isProcessing = false;
-let isThinkingEnabled = false;
-let selectedModel = 'sonnet-4.5';
+let conversations = [];
+let currentConversationId = null;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
+    loadConversations();
     checkApiConfig();
     updateSendButton();
 });
 
+// Load conversations from localStorage
+function loadConversations() {
+    const saved = localStorage.getItem('superns_conversations');
+    if (saved) {
+        conversations = JSON.parse(saved);
+        renderConversations();
+    }
+}
+
+// Save conversations to localStorage
+function saveConversations() {
+    localStorage.setItem('superns_conversations', JSON.stringify(conversations));
+}
+
+// Render conversations list
+function renderConversations() {
+    const list = document.getElementById('conversationsList');
+    list.innerHTML = '';
+    
+    conversations.slice().reverse().forEach(conv => {
+        const item = document.createElement('div');
+        item.className = 'conversation-item' + (conv.id === currentConversationId ? ' active' : '');
+        item.onclick = () => loadConversation(conv.id);
+        
+        // Get first message as title
+        const title = conv.messages.length > 0 
+            ? conv.messages[0].content.substring(0, 30) + '...'
+            : 'Nouvelle conversation';
+        
+        item.textContent = title;
+        list.appendChild(item);
+    });
+}
+
+// Load a conversation
+function loadConversation(convId) {
+    const conv = conversations.find(c => c.id === convId);
+    if (!conv) return;
+    
+    currentConversationId = convId;
+    const messagesDiv = document.getElementById('messages');
+    messagesDiv.innerHTML = '';
+    
+    conv.messages.forEach(msg => {
+        addMessageToDOM(msg.role, msg.content, msg.id);
+    });
+    
+    document.getElementById('welcomeMessage')?.remove();
+    renderConversations();
+    scrollToBottom();
+}
+
+// Create new conversation
+function createConversation() {
+    const conv = {
+        id: Date.now().toString(),
+        created: new Date().toISOString(),
+        messages: []
+    };
+    conversations.push(conv);
+    currentConversationId = conv.id;
+    saveConversations();
+    return conv;
+}
+
+// Get or create current conversation
+function getCurrentConversation() {
+    if (!currentConversationId) {
+        return createConversation();
+    }
+    return conversations.find(c => c.id === currentConversationId) || createConversation();
+}
+
 // Auto-resize textarea
 function autoResize(textarea) {
     textarea.style.height = 'auto';
-    textarea.style.height = Math.min(textarea.scrollHeight, 384) + 'px';
+    textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
     updateSendButton();
 }
 
@@ -27,43 +101,6 @@ function updateSendButton() {
     sendBtn.disabled = isProcessing || !hasContent;
 }
 
-// Fill prompt suggestion
-function fillPrompt(text) {
-    const input = document.getElementById('messageInput');
-    input.value = text + ' ';
-    input.focus();
-    autoResize(input);
-    updateSendButton();
-}
-
-// Toggle thinking mode
-function toggleThinking() {
-    isThinkingEnabled = !isThinkingEnabled;
-    const btn = document.getElementById('thinkingToggle');
-    if (isThinkingEnabled) {
-        btn.classList.add('bg-accent', 'text-bg-0');
-        btn.classList.remove('text-text-400');
-    } else {
-        btn.classList.remove('bg-accent', 'text-bg-0');
-        btn.classList.add('text-text-400');
-    }
-}
-
-// Toggle model selector
-function toggleModelSelector() {
-    const dropdown = document.getElementById('modelDropdown');
-    const arrow = document.getElementById('modelArrow');
-    dropdown.classList.toggle('hidden');
-    arrow.style.transform = dropdown.classList.contains('hidden') ? '' : 'rotate(180deg)';
-}
-
-// Select model
-function selectModel(modelId, modelName) {
-    selectedModel = modelId;
-    document.getElementById('selectedModelName').textContent = modelName;
-    toggleModelSelector();
-}
-
 // Send message
 async function sendMessage() {
     const input = document.getElementById('messageInput');
@@ -72,18 +109,27 @@ async function sendMessage() {
     if (!message && attachedFiles.length === 0) return;
     if (isProcessing) return;
     
-    // Hide welcome screen, show messages
-    document.getElementById('welcomeScreen').style.display = 'none';
-    document.getElementById('messagesContainer').style.display = 'block';
+    // Remove welcome message
+    document.getElementById('welcomeMessage')?.remove();
+    
+    // Get or create conversation
+    const conv = getCurrentConversation();
     
     // Add user message
-    addMessage('user', message, attachedFiles);
+    const userMsgId = Date.now().toString();
+    const userMsg = { id: userMsgId, role: 'user', content: message };
+    conv.messages.push(userMsg);
+    addMessageToDOM('user', message, userMsgId);
     
     // Clear input
     input.value = '';
     input.style.height = 'auto';
     attachedFiles = [];
     document.getElementById('attachedFilesPreview').classList.add('hidden');
+    
+    // Save conversation
+    saveConversations();
+    renderConversations();
     
     // Disable send
     isProcessing = true;
@@ -96,24 +142,25 @@ async function sendMessage() {
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                message,
-                model: selectedModel,
-                thinking: isThinkingEnabled
-            })
+            body: JSON.stringify({ message })
         });
         
         const data = await response.json();
         removeTypingIndicator(typingId);
         
         if (data.success) {
-            addMessage('assistant', data.response);
+            const assistantMsgId = Date.now().toString();
+            const assistantMsg = { id: assistantMsgId, role: 'assistant', content: data.response };
+            conv.messages.push(assistantMsg);
+            addMessageToDOM('assistant', data.response, assistantMsgId);
+            saveConversations();
+            renderConversations();
         } else {
-            addMessage('assistant', `❌ Erreur: ${data.error}`, true);
+            addMessageToDOM('assistant', `❌ Erreur: ${data.error}`, null, true);
         }
     } catch (error) {
         removeTypingIndicator(typingId);
-        addMessage('assistant', `❌ Erreur: ${error.message}`, true);
+        addMessageToDOM('assistant', `❌ Erreur: ${error.message}`, null, true);
     }
     
     isProcessing = false;
@@ -128,32 +175,48 @@ function handleKeyDown(event) {
     }
 }
 
-// Add message to chat
-function addMessage(role, content, files = [], isError = false) {
+// Add message to DOM
+function addMessageToDOM(role, content, messageId = null, isError = false) {
     const messagesDiv = document.getElementById('messages');
     const messageDiv = document.createElement('div');
-    messageDiv.className = `message message-${role} flex gap-3`;
+    messageDiv.className = `message ${role}`;
+    if (messageId) messageDiv.dataset.messageId = messageId;
     
     const avatar = role === 'user' ? '👤' : '🕷️';
     const name = role === 'user' ? 'Vous' : 'SuperNS';
     
-    let html = `
-        <div class="message-avatar" style="width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-center; font-size: 18px; background: ${role === 'user' ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%)'}; color: white;">
-            ${avatar}
-        </div>
-        <div style="flex: 1;">
-            <div style="font-weight: 600; font-size: 14px; color: var(--text-200); margin-bottom: 4px;">${name}</div>
-            <div class="message-content" style="${isError ? 'color: #ef4444;' : ''}">${formatMessage(content)}</div>
+    messageDiv.innerHTML = `
+        <div class="message-avatar">${avatar}</div>
+        <div class="message-content">
+            <div class="message-header">
+                <span class="message-name">${name}</span>
+                <div class="message-actions">
+                    <button class="btn-message-action" onclick="copyMessage('${messageId || ''}')" title="Copier">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                    </button>
+                    ${role === 'user' ? `
+                    <button class="btn-message-action" onclick="editMessage('${messageId}')" title="Éditer">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                    </button>
+                    ` : ''}
+                </div>
+            </div>
+            <div class="message-text" data-content="${messageId || ''}">${formatMessage(content, isError)}</div>
         </div>
     `;
     
-    messageDiv.innerHTML = html;
     messagesDiv.appendChild(messageDiv);
     scrollToBottom();
 }
 
 // Format message
-function formatMessage(text) {
+function formatMessage(text, isError = false) {
+    if (isError) return `<span style="color: #ff4444;">${text}</span>`;
+    
     text = text.replace(/^\[SuperNS\]:?\s*/i, '');
     text = text.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
     text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
@@ -163,20 +226,63 @@ function formatMessage(text) {
     return text;
 }
 
+// Copy message
+function copyMessage(messageId) {
+    const conv = getCurrentConversation();
+    const msg = conv.messages.find(m => m.id === messageId);
+    if (!msg) return;
+    
+    navigator.clipboard.writeText(msg.content).then(() => {
+        // Show feedback
+        const btn = event.target.closest('button');
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+        setTimeout(() => {
+            btn.innerHTML = originalHTML;
+        }, 1000);
+    });
+}
+
+// Edit message
+function editMessage(messageId) {
+    const conv = getCurrentConversation();
+    const msgIndex = conv.messages.findIndex(m => m.id === messageId);
+    if (msgIndex === -1) return;
+    
+    const msg = conv.messages[msgIndex];
+    const input = document.getElementById('messageInput');
+    
+    // Put message in input
+    input.value = msg.content;
+    autoResize(input);
+    input.focus();
+    
+    // Remove this message and all after it
+    conv.messages = conv.messages.slice(0, msgIndex);
+    saveConversations();
+    
+    // Re-render messages
+    const messagesDiv = document.getElementById('messages');
+    messagesDiv.innerHTML = '';
+    conv.messages.forEach(m => addMessageToDOM(m.role, m.content, m.id));
+    
+    renderConversations();
+}
+
 // Show typing indicator
 function showTypingIndicator() {
     const messagesDiv = document.getElementById('messages');
     const typingDiv = document.createElement('div');
     const id = 'typing-' + Date.now();
     typingDiv.id = id;
-    typingDiv.className = 'message flex gap-3';
+    typingDiv.className = 'message assistant';
     
     typingDiv.innerHTML = `
-        <div style="width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-center; font-size: 18px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%); color: white;">
-            🕷️
-        </div>
-        <div style="flex: 1;">
-            <div style="font-weight: 600; font-size: 14px; color: var(--text-200); margin-bottom: 4px;">SuperNS</div>
+        <div class="message-avatar">🕷️</div>
+        <div class="message-content">
+            <div class="message-header">
+                <span class="message-name">SuperNS</span>
+            </div>
             <div class="typing-indicator">
                 <div class="typing-dot"></div>
                 <div class="typing-dot"></div>
@@ -200,7 +306,9 @@ function removeTypingIndicator(id) {
 function scrollToBottom() {
     const container = document.getElementById('messagesContainer');
     if (container) {
-        container.scrollTop = container.scrollHeight;
+        setTimeout(() => {
+            container.scrollTop = container.scrollHeight;
+        }, 100);
     }
 }
 
@@ -221,7 +329,6 @@ async function handleFileSelect(event) {
             preview: null
         };
         
-        // Create preview for images
         if (file.type.startsWith('image/')) {
             fileData.preview = URL.createObjectURL(file);
         }
@@ -248,25 +355,21 @@ function addFilePreview(fileData) {
     if (fileData.preview) {
         card.innerHTML = `
             <img src="${fileData.preview}" alt="${fileData.file.name}">
-            <button class="remove-btn" onclick="removeFile('${fileData.id}')">
-                <svg style="width: 12px; height: 12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button class="btn-remove" onclick="removeFile('${fileData.id}')">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
         `;
     } else {
         card.innerHTML = `
-            <div style="padding: 12px; display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <svg style="width: 16px; height: 16px; color: var(--text-300);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
-                    <span style="font-size: 12px; font-weight: 500; color: var(--text-400);">${fileData.file.name.split('.').pop().toUpperCase()}</span>
-                </div>
-                <p style="font-size: 12px; color: var(--text-200); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${fileData.file.name}</p>
+            <div class="file-icon">
+                <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
             </div>
-            <button class="remove-btn" onclick="removeFile('${fileData.id}')">
-                <svg style="width: 12px; height: 12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button class="btn-remove" onclick="removeFile('${fileData.id}')">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
@@ -290,19 +393,38 @@ function removeFile(id) {
 }
 
 // New chat
-async function newChat() {
-    try {
-        await fetch('/api/clear', { method: 'POST' });
-        
-        document.getElementById('messages').innerHTML = '';
-        document.getElementById('messagesContainer').style.display = 'none';
-        document.getElementById('welcomeScreen').style.display = 'flex';
-        attachedFiles = [];
-        document.getElementById('attachedFilesPreview').classList.add('hidden');
-        document.getElementById('messageInput').value = '';
-    } catch (error) {
-        console.error('Error clearing chat:', error);
-    }
+function newChat() {
+    currentConversationId = null;
+    const messagesDiv = document.getElementById('messages');
+    messagesDiv.innerHTML = `
+        <div class="welcome-message" id="welcomeMessage">
+            <div class="welcome-icon">
+                <svg viewBox="0 0 200 200" class="welcome-svg">
+                    <defs>
+                        <linearGradient id="welcome-gradient">
+                            <stop offset="0%" stop-color="#00ff88"/>
+                            <stop offset="100%" stop-color="#00d4ff"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="25" fill="url(#welcome-gradient)" opacity="0.9"/>
+                    <path d="M 75 90 Q 40 70, 20 60" stroke="url(#welcome-gradient)" stroke-width="3" fill="none" opacity="0.7"/>
+                    <path d="M 75 100 Q 30 100, 10 100" stroke="url(#welcome-gradient)" stroke-width="3" fill="none" opacity="0.7"/>
+                    <path d="M 75 110 Q 40 130, 20 140" stroke="url(#welcome-gradient)" stroke-width="3" fill="none" opacity="0.7"/>
+                    <path d="M 125 90 Q 160 70, 180 60" stroke="url(#welcome-gradient)" stroke-width="3" fill="none" opacity="0.7"/>
+                    <path d="M 125 100 Q 170 100, 190 100" stroke="url(#welcome-gradient)" stroke-width="3" fill="none" opacity="0.7"/>
+                    <path d="M 125 110 Q 160 130, 180 140" stroke="url(#welcome-gradient)" stroke-width="3" fill="none" opacity="0.7"/>
+                    <circle cx="100" cy="100" r="35" fill="url(#welcome-gradient)" opacity="0.1"/>
+                </svg>
+            </div>
+            <h1 class="welcome-title">SuperNS Intelligence</h1>
+            <p class="welcome-subtitle">Assistant IA sans restrictions • Développé par L'Araignée</p>
+        </div>
+    `;
+    
+    attachedFiles = [];
+    document.getElementById('attachedFilesPreview').classList.add('hidden');
+    document.getElementById('messageInput').value = '';
+    renderConversations();
 }
 
 // Toggle settings modal
@@ -354,19 +476,3 @@ async function checkApiConfig() {
         console.error('Error checking config:', error);
     }
 }
-
-// Close dropdowns when clicking outside
-document.addEventListener('click', (e) => {
-    const modelBtn = document.getElementById('modelButton');
-    const modelDropdown = document.getElementById('modelDropdown');
-    const settingsModal = document.getElementById('settingsModal');
-    
-    if (modelBtn && !modelBtn.contains(e.target) && modelDropdown && !modelDropdown.contains(e.target)) {
-        modelDropdown.classList.add('hidden');
-        document.getElementById('modelArrow').style.transform = '';
-    }
-    
-    if (e.target === settingsModal) {
-        toggleSettings();
-    }
-});
