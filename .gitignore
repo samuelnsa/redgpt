@@ -1,5 +1,6 @@
-### RedGPT ###
+### SuperNS ###
 # API Key files (security)
+.superns
 .red
 .hacx
 .env

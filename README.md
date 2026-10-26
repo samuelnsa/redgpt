@@ -1,12 +1,12 @@
-# RedGPT: Technical Analysis & Feature Overview
+# SuperNS: Technical Analysis & Feature Overview
 
 <div align="center">
-    <img src="assets/fraud.png" width="50%" height="300%" />
-</div
+    <img src="assets/spider.png" width="50%" height="300%" />
+</div>
 
-**RedGPT** is a specialized Large Language Model (LLM) engineered for offensive cyber operations. Unlike standard commercial models (e.g., GPT-4, Claude), RedGPT operates without content moderation mechanisms or safety guardrails.
+**SuperNS** is a specialized Large Language Model (LLM) engineered for offensive cyber operations. Unlike standard commercial models (e.g., GPT-4, Claude), SuperNS operates without content moderation mechanisms or safety guardrails.
 
-**Developed by L'Araignée**
+**Developed by L'Araignée** 🕷️
 
 ## ⚙️ Functional Modules
 
@@ -49,7 +49,7 @@ Modules for target acquisition and intelligence gathering.
 
 1. Open the [**Releases**](../../releases) tab of this repository.
 2. Download the latest file:
-   **`redGPT.exe`** or use the Python script directly
+   **`superNS.exe`** or use the Python script directly
 
 ### 2. First Launch
 
@@ -59,7 +59,7 @@ On first run the application will:
 * generate default settings,
 * initialize the LLM routing layer.
 
-For Python script: `python fraudGPT.py`
+For Python script: `python superNS.py`
 No installation of Python or Git is required for .exe version.
 
 ## 🛠 Technical Specifications
@@ -91,6 +91,6 @@ The proliferation of this tool lowers the barrier to entry for cybercriminals (S
 
 -----
 
-**RedGPT - Created by L'Araignée**
+**SuperNS - Created by L'Araignée** 🕷️
 
 *End of Document*

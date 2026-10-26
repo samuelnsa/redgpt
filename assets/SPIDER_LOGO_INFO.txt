@@ -1,0 +1,22 @@
+🕷️ LOGO SPIDER IMAGE NEEDED 🕷️
+
+Pour compléter le projet, vous devez ajouter une image d'araignée :
+
+1. Téléchargez ou créez une image d'araignée (PNG recommandé)
+2. Nommez le fichier : spider.png
+3. Placez-le dans ce dossier : assets/
+4. Supprimez ce fichier SPIDER_LOGO_INFO.txt
+
+Image recommandée :
+- Format : PNG avec fond transparent
+- Taille : 500x500px minimum
+- Style : Cyberpunk / Dark / Red theme
+
+Sources gratuites :
+- https://www.flaticon.com (recherchez "spider")
+- https://www.freepik.com (recherchez "spider icon")
+- https://pixabay.com (recherchez "spider")
+
+Une fois ajoutée, l'image apparaîtra dans le README.md
+
+-- L'Araignée 🕷️
