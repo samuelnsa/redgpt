@@ -1,94 +1,98 @@
 # 📝 Changelog - SuperNS
 
-All notable changes to this project will be documented in this file.
+## Version 2.0 - Interface Web Moderne (26/10/2026)
 
-## [2.0.0] - 2026-10-26 🕷️
+### 🎨 Nouvelles fonctionnalités majeures
 
-### 🎉 Major Release - Web Interface
+#### Interface Web ChatGPT-like
+- ✅ **Design moderne et professionnel** inspiré de ChatGPT/Claude
+- ✅ **Thème sombre** (rouge et noir) avec animations fluides
+- ✅ **Interface responsive** adaptée desktop et mobile
+- ✅ **Logo personnalisé** 🕷️ L'Araignée
 
-#### Added
-- ✨ **Modern Web Interface** - ChatGPT/Claude-inspired UI
-- 📎 **File Upload System** - Support for documents, images, and code files
-- 🎨 **Dark Theme** - Elegant red & black L'Araignée theme
-- 💬 **Real-time Chat** - Smooth conversation experience
-- 🎯 **Markdown Support** - Code highlighting and formatting
-- 📱 **Responsive Design** - Works on desktop and mobile
-- ⚙️ **Settings Panel** - Easy API key configuration
-- 🔄 **Session Management** - Persistent conversation history
-- 📊 **Typing Indicators** - Visual feedback during AI responses
-- 🚀 **Quick Start Script** - `START_WEB.bat` for Windows users
+#### Fonctionnalités avancées
+- ✅ **Upload de fichiers** multiples (16 MB max)
+  - Documents : TXT, PDF, DOC, DOCX
+  - Code : PY, JS, HTML, CSS, JSON
+  - Images : PNG, JPG, JPEG, GIF
+- ✅ **Rendu Markdown** avec coloration syntaxique
+- ✅ **Conversations persistantes** avec historique
+- ✅ **Indicateur de saisie** (typing indicator)
+- ✅ **Support multilingue** (FR/EN)
 
-#### Technical
-- Flask backend with CORS support
-- OpenAI-compatible API integration
-- DeepSeek & OpenRouter support
-- Secure file upload with validation
-- Session-based conversation history
-- Error handling with user-friendly messages
+#### Améliorations techniques
+- ✅ Backend Flask robuste
+- ✅ API REST sécurisée
+- ✅ Gestion de session
+- ✅ Stockage sécurisé des clés API
+- ✅ Compatible Python 3.13
 
-#### Documentation
-- 📚 Comprehensive user guide (GUIDE.md)
-- 📸 ASCII preview in README
-- 🔧 Configuration example file
-- 🏷️ GitHub badges and status indicators
+### 🐛 Corrections
+- ✅ Fix compatibilité Python 3.13 (watchdog issue)
+- ✅ Fix erreur syntaxe dans configure_key()
+- ✅ Fix modèle API déprécié (OpenRouter)
 
----
-
-## [1.2.0] - 2026-10-26
-
-### Changed
-- 🔄 Rebranded from RedGPT to SuperNS
-- 🕷️ New spider logo (SVG format)
-- 🎨 Updated ASCII art banner
-- 📝 Updated all documentation
-
-### Fixed
-- 🐛 Syntax error in `configure_key` method
-- 🔧 Model deprecation (switched to Llama 3.1)
-
----
-
-## [1.1.0] - 2026-10-26
-
-### Changed
-- 🔄 Rebranded from HacxGPT to RedGPT
-- 👤 Developer changed to "L'Araignée"
-- 🎨 Updated all branding elements
+### 📦 Fichiers ajoutés
+```
+├── app.py                 # Serveur Flask
+├── requirements.txt       # Dépendances
+├── START_WEB.bat         # Lanceur rapide
+├── GUIDE.md              # Guide utilisateur
+├── CHANGELOG.md          # Ce fichier
+├── templates/
+│   └── index.html        # Interface web
+└── static/
+    ├── style.css         # CSS moderne
+    └── script.js         # JavaScript interactif
+```
 
 ---
 
-## [1.0.0] - Initial Release
+## Version 1.0 - Rebranding SuperNS (26/10/2026)
 
-### Added
-- ⚡ CLI-based chat interface
-- 🎨 Rich terminal UI with colors
-- 🔐 API key management
-- 💾 Conversation history
-- 🎯 Custom system prompts
-- 🌐 Multi-provider support (OpenRouter, DeepSeek)
+### 🔄 Changements majeurs
+- ✅ Rebranding complet : RedGPT → **SuperNS**
+- ✅ Nouveau logo araignée SVG personnalisé 🕷️
+- ✅ Signature "L'Araignée" sur tous les éléments
+- ✅ ASCII art mis à jour pour SuperNS
+- ✅ Fichier config : `.red` → `.superns`
+- ✅ Variable API : `RedGPT-API` → `SuperNS-API`
 
----
-
-## 🚀 Upcoming Features
-
-### v2.1.0 (Planned)
-- [ ] Image generation support
-- [ ] Voice input/output
-- [ ] Multiple conversation threads
-- [ ] Export conversations (PDF, Markdown)
-- [ ] Plugin system
-- [ ] Advanced code editor integration
-- [ ] Custom themes
-
-### v3.0.0 (Future)
-- [ ] Desktop application (Electron)
-- [ ] Mobile app (React Native)
-- [ ] Team collaboration features
-- [ ] Cloud synchronization
-- [ ] Advanced analytics
+### 📝 Documentation
+- ✅ README.md actualisé
+- ✅ Installation simplifiée
+- ✅ Guide de configuration
 
 ---
 
-**Current Version:** 2.0.0  
-**Last Updated:** October 26, 2026  
-**Developed by:** L'Araignée 🕷️
+## Version 0.1 - FraudGPT Fork (Initial)
+
+### ⚠️ Version originale
+- Base HacxGPT/FraudGPT
+- Interface CLI uniquement
+- Prompt système non censuré
+- Support OpenRouter et DeepSeek
+
+---
+
+## 🚀 Roadmap Future
+
+### Version 2.1 (À venir)
+- [ ] Support de plus de formats de fichiers
+- [ ] Export des conversations en PDF/TXT
+- [ ] Thèmes personnalisables
+- [ ] Mode vocal (speech-to-text)
+- [ ] Raccourcis clavier avancés
+- [ ] Historique de conversations sauvegardé
+
+### Version 3.0 (Planifié)
+- [ ] Multi-utilisateurs avec authentification
+- [ ] Base de données pour persistance
+- [ ] API publique REST
+- [ ] Plugins système
+- [ ] Mode collaboratif (chat partagé)
+- [ ] Version desktop (Electron)
+
+---
+
+**Développé avec 🕷️ par L'Araignée**

@@ -1,157 +1,239 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SuperNS - by L'Araignée 🕷️</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
-<body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <div class="logo">
-                <svg width="40" height="40" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="45" fill="#dc2626" opacity="0.2"/>
-                    <text x="50" y="65" font-size="45" fill="#dc2626" text-anchor="middle" font-weight="bold">🕷️</text>
-                </svg>
-                <div>
-                    <h1>SuperNS</h1>
-                    <p>by L'Araignée</p>
+<body class="h-full overflow-hidden bg-bg-0">
+    
+    <div class="flex h-full">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-bg-100 border-r border-bg-300 flex flex-col transition-all">
+            <!-- Logo Section -->
+            <div class="p-4 border-b border-bg-300">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 flex items-center justify-center">
+                        <svg class="w-full h-full" viewBox="0 0 100 100">
+                            <text x="50" y="65" font-size="50" fill="#D97757" text-anchor="middle">🕷️</text>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-text-100">SuperNS</h1>
+                        <p class="text-xs text-text-400">by L'Araignée</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="sidebar-content">
-            <button class="new-chat-btn" onclick="newChat()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                Nouvelle conversation
-            </button>
             
-            <div class="chat-history" id="chatHistory">
-                <!-- Chat history will be added here -->
+            <!-- New Chat Button -->
+            <div class="p-3">
+                <button onclick="newChat()" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-accent text-bg-0 rounded-xl font-medium text-sm hover:bg-accent-hover transition-all active:scale-95">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Nouvelle conversation
+                </button>
             </div>
-        </div>
-        
-        <div class="sidebar-footer">
-            <button class="settings-btn" onclick="toggleSettings()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="3"></circle>
-                    <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3"></path>
-                </svg>
-                Paramètres
-            </button>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-info">
-                <h2>SuperNS Assistant</h2>
-                <span class="status" id="status">
-                    <span class="status-dot"></span>
-                    Prêt
-                </span>
+            
+            <!-- Chat History -->
+            <div class="flex-1 overflow-y-auto px-3" id="chatHistory">
+                <!-- History items will be added here -->
             </div>
-        </div>
+            
+            <!-- Settings Button -->
+            <div class="p-3 border-t border-bg-300">
+                <button onclick="toggleSettings()" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-text-300 border border-bg-300 rounded-xl text-sm hover:text-text-200 hover:border-accent transition-all">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    Paramètres
+                </button>
+            </div>
+        </aside>
 
-        <!-- Chat Container -->
-        <div class="chat-container" id="chatContainer">
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col bg-bg-0 overflow-hidden">
+            
             <!-- Welcome Screen -->
-            <div class="welcome-screen" id="welcomeScreen">
-                <div class="welcome-logo">🕷️</div>
-                <h1>Bienvenue sur SuperNS</h1>
-                <p>Assistant IA avancé développé par L'Araignée</p>
-                
-                <div class="feature-cards">
-                    <div class="feature-card">
-                        <div class="feature-icon">💬</div>
-                        <h3>Conversations</h3>
-                        <p>Discussions illimitées et contextuelles</p>
+            <div id="welcomeScreen" class="flex-1 flex flex-col items-center justify-center px-4 animate-fade-in">
+                <div class="max-w-3xl w-full text-center">
+                    <!-- Logo -->
+                    <div class="w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+                        <svg class="w-full h-full" viewBox="0 0 100 100">
+                            <text x="50" y="70" font-size="60" text-anchor="middle">🕷️</text>
+                        </svg>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">📎</div>
-                        <h3>Fichiers</h3>
-                        <p>Upload de documents et images</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">⚡</div>
-                        <h3>Rapide</h3>
-                        <p>Réponses en temps réel</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">🔒</div>
-                        <h3>Sécurisé</h3>
-                        <p>Vos données restent privées</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Messages Area -->
-            <div class="messages" id="messages">
-                <!-- Messages will be added here -->
-            </div>
-        </div>
-
-        <!-- Input Area -->
-        <div class="input-area">
-            <div class="input-container">
-                <button class="attach-btn" onclick="document.getElementById('fileInput').click()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
-                    </svg>
-                </button>
-                
-                <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect(event)" multiple>
-                
-                <div class="input-wrapper">
-                    <textarea 
-                        id="messageInput" 
-                        placeholder="Envoyez un message à SuperNS..." 
-                        rows="1"
-                        onkeydown="handleKeyPress(event)"
-                    ></textarea>
                     
-                    <div class="attached-files" id="attachedFiles"></div>
+                    <!-- Greeting -->
+                    <h1 class="text-4xl font-serif font-light text-text-200 mb-6 tracking-tight">
+                        Bonjour, <span class="relative inline-block">
+                            <span id="userName">Utilisateur</span>
+                            <svg class="absolute w-full h-5 -bottom-1 left-0 text-accent" viewBox="0 0 140 24" fill="none" preserveAspectRatio="none">
+                                <path d="M6 16 Q 70 24, 134 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                            </svg>
+                        </span>
+                    </h1>
+                    
+                    <p class="text-lg text-text-400 mb-12">Comment puis-je vous aider aujourd'hui ?</p>
+                    
+                    <!-- Suggestion Pills -->
+                    <div class="flex flex-wrap justify-center gap-2 mb-8">
+                        <button onclick="fillPrompt('Écris-moi un')" class="px-4 py-2 text-sm text-text-300 border border-bg-300 rounded-full hover:bg-bg-200 hover:text-text-200 transition-all">
+                            ✍️ Écrire
+                        </button>
+                        <button onclick="fillPrompt('Explique-moi')" class="px-4 py-2 text-sm text-text-300 border border-bg-300 rounded-full hover:bg-bg-200 hover:text-text-200 transition-all">
+                            🎓 Apprendre
+                        </button>
+                        <button onclick="fillPrompt('Code une application')" class="px-4 py-2 text-sm text-text-300 border border-bg-300 rounded-full hover:bg-bg-200 hover:text-text-200 transition-all">
+                            💻 Code
+                        </button>
+                        <button onclick="fillPrompt('Aide-moi à')" class="px-4 py-2 text-sm text-text-300 border border-bg-300 rounded-full hover:bg-bg-200 hover:text-text-200 transition-all">
+                            🏠 Quotidien
+                        </button>
+                    </div>
                 </div>
-                
-                <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="22" y1="2" x2="11" y2="13"></line>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                    </svg>
-                </button>
             </div>
             
-            <div class="input-footer">
-                SuperNS peut faire des erreurs. Vérifiez les informations importantes.
+            <!-- Messages Container -->
+            <div id="messagesContainer" class="flex-1 overflow-y-auto px-4 py-6" style="display: none;">
+                <div id="messages" class="max-w-3xl mx-auto space-y-6">
+                    <!-- Messages will be added here -->
+                </div>
             </div>
-        </div>
+            
+            <!-- Input Container - Fixed at Bottom -->
+            <div class="border-t border-bg-300 bg-bg-0 px-4 py-4">
+                <div class="max-w-3xl mx-auto">
+                    
+                    <!-- Chat Input Card -->
+                    <div id="inputCard" class="relative bg-bg-100 border border-bg-300 rounded-2xl shadow-input hover:shadow-input-hover focus-within:shadow-input-focus transition-all">
+                        
+                        <!-- Attached Files Preview -->
+                        <div id="attachedFilesPreview" class="hidden flex gap-3 overflow-x-auto px-3 pt-3 pb-2 custom-scrollbar">
+                            <!-- File previews will be added here -->
+                        </div>
+                        
+                        <!-- Input Area -->
+                        <div class="flex flex-col px-3 pt-3 pb-2 gap-2">
+                            <div class="relative">
+                                <textarea 
+                                    id="messageInput"
+                                    placeholder="Comment puis-je vous aider aujourd'hui ?"
+                                    rows="1"
+                                    class="w-full bg-transparent border-0 outline-none text-text-100 text-base placeholder:text-text-400 resize-none overflow-hidden py-1 leading-relaxed"
+                                    onkeydown="handleKeyDown(event)"
+                                    oninput="autoResize(this)"
+                                ></textarea>
+                            </div>
+                            
+                            <!-- Action Bar -->
+                            <div class="flex items-center justify-between gap-2">
+                                <!-- Left Actions -->
+                                <div class="flex items-center gap-1">
+                                    <!-- Attach Button -->
+                                    <button onclick="document.getElementById('fileInput').click()" class="p-2 text-text-400 hover:text-text-200 hover:bg-bg-200 rounded-lg transition-all active:scale-95">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                        </svg>
+                                    </button>
+                                    
+                                    <!-- Extended Thinking Toggle -->
+                                    <button id="thinkingToggle" onclick="toggleThinking()" class="p-2 text-text-400 hover:text-text-200 hover:bg-bg-200 rounded-lg transition-all active:scale-95">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10.3857 2.50977C14.3486 2.71054 17.5 5.98724 17.5 10C17.5 14.1421 14.1421 17.5 10 17.5C5.85786 17.5 2.5 14.1421 2.5 10C2.5 9.72386 2.72386 9.5 3 9.5C3.27614 9.5 3.5 9.72386 3.5 10C3.5 13.5899 6.41015 16.5 10 16.5C13.5899 16.5 16.5 13.5899 16.5 10C16.5 6.5225 13.7691 3.68312 10.335 3.50879L10 3.5L9.89941 3.49023C9.67145 3.44371 9.5 3.24171 9.5 3C9.5 2.72386 9.72386 2.5 10 2.5L10.3857 2.50977Z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                
+                                <!-- Right Actions -->
+                                <div class="flex items-center gap-2">
+                                    <!-- Model Selector -->
+                                    <div class="relative">
+                                        <button id="modelButton" onclick="toggleModelSelector()" class="px-3 py-1.5 text-xs font-medium text-text-300 hover:text-text-200 hover:bg-bg-200 rounded-xl transition-all flex items-center gap-1">
+                                            <span id="selectedModelName">Sonnet 4.5</span>
+                                            <svg class="w-4 h-4 transition-transform" id="modelArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                            </svg>
+                                        </button>
+                                        
+                                        <!-- Model Dropdown -->
+                                        <div id="modelDropdown" class="hidden absolute bottom-full right-0 mb-2 w-64 bg-bg-100 border border-bg-300 rounded-2xl shadow-2xl overflow-hidden animate-fade-in">
+                                            <div class="p-1.5">
+                                                <button onclick="selectModel('opus-4.5', 'Opus 4.5')" class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-bg-200 transition-colors">
+                                                    <div class="font-semibold text-sm text-text-100">Opus 4.5</div>
+                                                    <div class="text-xs text-text-400">Plus capable pour tâches complexes</div>
+                                                </button>
+                                                <button onclick="selectModel('sonnet-4.5', 'Sonnet 4.5')" class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-bg-200 transition-colors">
+                                                    <div class="font-semibold text-sm text-text-100">Sonnet 4.5</div>
+                                                    <div class="text-xs text-text-400">Meilleur pour le quotidien</div>
+                                                </button>
+                                                <button onclick="selectModel('haiku-4.5', 'Haiku 4.5')" class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-bg-200 transition-colors">
+                                                    <div class="font-semibold text-sm text-text-100">Haiku 4.5</div>
+                                                    <div class="text-xs text-text-400">Plus rapide pour réponses courtes</div>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Send Button -->
+                                    <button id="sendButton" onclick="sendMessage()" class="p-2 bg-accent text-bg-0 rounded-xl hover:bg-accent-hover transition-all active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed" disabled>
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Footer Text -->
+                    <p class="text-center text-xs text-text-500 mt-3">
+                        SuperNS peut faire des erreurs. Vérifiez les informations importantes.
+                    </p>
+                </div>
+            </div>
+            
+        </main>
     </div>
 
     <!-- Settings Modal -->
-    <div class="modal" id="settingsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Paramètres</h2>
-                <button class="close-btn" onclick="toggleSettings()">×</button>
+    <div id="settingsModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">
+        <div class="bg-bg-100 rounded-2xl border border-bg-300 w-full max-w-md mx-4 shadow-2xl">
+            <div class="flex items-center justify-between p-6 border-b border-bg-300">
+                <h2 class="text-xl font-semibold text-text-100">Paramètres</h2>
+                <button onclick="toggleSettings()" class="p-1 text-text-400 hover:text-text-200 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
             </div>
-            <div class="modal-body">
-                <div class="setting-group">
-                    <label for="apiKeyInput">Clé API DeepSeek</label>
-                    <input type="password" id="apiKeyInput" placeholder="sk-...">
-                    <small>Obtenir une clé sur <a href="https://platform.deepseek.com/" target="_blank">platform.deepseek.com</a></small>
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-text-200 mb-2">Clé API DeepSeek</label>
+                        <input 
+                            type="password" 
+                            id="apiKeyInput" 
+                            placeholder="sk-..." 
+                            class="w-full px-4 py-2.5 bg-bg-200 border border-bg-300 rounded-xl text-text-100 placeholder:text-text-400 focus:outline-none focus:border-accent transition-colors"
+                        >
+                        <p class="mt-2 text-xs text-text-400">
+                            Obtenir une clé sur <a href="https://platform.deepseek.com/" target="_blank" class="text-accent hover:underline">platform.deepseek.com</a>
+                        </p>
+                    </div>
+                    <button onclick="saveSettings()" class="w-full px-4 py-3 bg-accent text-bg-0 rounded-xl font-medium hover:bg-accent-hover transition-all active:scale-95">
+                        Enregistrer
+                    </button>
                 </div>
-                <button class="btn-primary" onclick="saveSettings()">Enregistrer</button>
             </div>
         </div>
     </div>
+
+    <!-- Hidden File Input -->
+    <input type="file" id="fileInput" multiple class="hidden" onchange="handleFileSelect(event)">
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
