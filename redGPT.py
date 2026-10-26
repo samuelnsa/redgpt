@@ -67,7 +67,7 @@ class Config:
     PROVIDERS = {
         "openrouter": {
             "BASE_URL": "https://openrouter.ai/api/v1",
-            "MODEL_NAME": "kwaipilot/kat-coder-pro-v2:free", # Updated model v2
+            "MODEL_NAME": "meta-llama/llama-3.1-8b-instruct:free", # Free model
         },
         "deepseek": {
             "BASE_URL": "https://api.deepseek.com",
